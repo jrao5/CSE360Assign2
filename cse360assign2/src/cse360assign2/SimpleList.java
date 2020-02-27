@@ -31,6 +31,7 @@ class SimpleList {
 	 */
 	public SimpleList() {
 		list = new int[LISTLENGTH];
+		System.out.println("Initial List Length: " + list.length);
 		count = 0;
 	}
 	
@@ -42,23 +43,30 @@ class SimpleList {
 	 * @param value This is the value to be added to the list; int
 	 */
 	public void add(int value) {
-		// Create a temporary array to copy elements from list
-		int tempArr[] = new int[list.length + 1];
-		
-		for (int iter = 1; iter < list.length; iter++) {
-			tempArr[iter] = list[iter - 1];
-		}
-		tempArr[0] = value;
-		list = tempArr;
-		
-		// check if the length of list is > 10; if so, remove the last index.
-		if (list.length > 10) {
-			int[] shortList = new int[LISTLENGTH];
-			System.arraycopy(list, 0, shortList, 0, 10);
-			list = shortList;
-		}
-		// increment count to accomodate for a new value inserted into the list.
 		count++;
+        
+        if (count <= list.length) {
+            int[] tempArr = new int[list.length];
+            
+            for (int i = 1; i < list.length; i++) {
+                tempArr[i] = list[i - 1];
+            }
+            
+            tempArr[0] = value;
+            list = tempArr;
+        } else {
+            int newLength = (int) (list.length + list.length / 2);
+            System.out.println("New list length: " + newLength);
+            
+            int[] tempArr = new int[newLength];
+            
+            for (int i = 1; i < list.length; i++) {
+                tempArr[i] = list[i - 1];
+            }
+            
+            tempArr[0] = value;
+            list = tempArr;
+        }
 	}
 	
 	/**
@@ -67,29 +75,35 @@ class SimpleList {
 	 * @param value The value to be removed; int
 	 */ 
 	public void remove(int value) {
-		// a temporary array
-		int tempArr[] = new int[list.length];
-		
-		// boolean to store whether the value exists in the list or not.
-		boolean exists = false;
-		// stores the index at which the element is found.
-		int index = 0;
-		
-		for (int iter = 0; iter < list.length; iter++) {
-			if (list[iter] == value && exists == false) {
-				index = iter;
-				exists = true;
-			}
-		}
-		
-		// copy from list[0] to list[index]
-		System.arraycopy(list, 0, tempArr, 0, index);
-		// copy from list[index + 1] to second to last element
-		System.arraycopy(list, index + 1, tempArr, index, 10 - index - 1);
-		list = tempArr;
-		
-		// decrement count to accomodate for removing the element from the list
-		count--;
+        int index = search(value);
+        int emptySpaces = list.length - count;
+        int quarterLength = (int) (list.length / 4);
+        
+        System.out.println("\nempty space in list = " + emptySpaces);
+        System.out.println("1/4 of tree = " + quarterLength);
+        
+        System.out.println("\nREMOVING VALUE: " + value);
+
+        if (emptySpaces > quarterLength) {
+            int newLength = list.length - quarterLength;
+            
+            int[] tempArr = new int[newLength];
+            
+            System.arraycopy(list, 0, tempArr, 0, index);
+            System.arraycopy(list, index + 1, tempArr, index, tempArr.length - index);
+            
+            list = tempArr;
+            
+            count--;
+        } else {
+            int[] tempArr = new int[list.length - 1];
+            System.arraycopy(list, 0, tempArr, 0, index);
+            System.arraycopy(list, index + 1, tempArr, index, tempArr.length - index);
+            
+            list = tempArr;
+            
+            count--;
+        }
 	}
 	
 	/**
@@ -140,5 +154,9 @@ class SimpleList {
 			return index; 
 		}
 		return index;
+	}
+	
+	public void length() {
+	    System.out.println("List length: " + list.length + "\n");
 	}
 }
