@@ -31,7 +31,7 @@ class SimpleList {
 	 */
 	public SimpleList() {
 		list = new int[LISTLENGTH];
-		System.out.println("Initial List Length: " + list.length);
+		//System.out.println("Initial List Length: " + list.length);
 		count = 0;
 	}
 	
@@ -44,8 +44,8 @@ class SimpleList {
 	 */
 	public void add(int value) {
 		count++;
-        
-        if (count <= list.length) {
+		
+        if (count <= list.length) { // if the list is not fully filled
             int[] tempArr = new int[list.length];
             
             for (int i = 1; i < list.length; i++) {
@@ -54,13 +54,11 @@ class SimpleList {
             
             tempArr[0] = value;
             list = tempArr;
-        } else {
+        } else { // if the list is fully filled and a new value is being added
             int newLength = (int) (list.length + list.length / 2);
-            System.out.println("New list length: " + newLength);
-            
             int[] tempArr = new int[newLength];
             
-            for (int i = 1; i < list.length; i++) {
+            for (int i = 1; i < list.length + 1; i++) {
                 tempArr[i] = list[i - 1];
             }
             
@@ -77,16 +75,10 @@ class SimpleList {
 	public void remove(int value) {
         int index = search(value);
         int emptySpaces = list.length - count;
-        int quarterLength = (int) (list.length / 4);
-        
-        System.out.println("\nempty space in list = " + emptySpaces);
-        System.out.println("1/4 of tree = " + quarterLength);
-        
-        System.out.println("\nREMOVING VALUE: " + value);
+        int quarterLength = (int) (list.length / 4); // cast as int to floor the value
 
-        if (emptySpaces > quarterLength) {
+        if (emptySpaces > quarterLength) { // if there are more empty spaces than 25% of the list
             int newLength = list.length - quarterLength;
-            
             int[] tempArr = new int[newLength];
             
             System.arraycopy(list, 0, tempArr, 0, index);
@@ -95,10 +87,10 @@ class SimpleList {
             list = tempArr;
             
             count--;
-        } else {
-            int[] tempArr = new int[list.length - 1];
+        } else { // if there are fewer empty spaces than 25% of the list
+            int[] tempArr = new int[list.length];
             System.arraycopy(list, 0, tempArr, 0, index);
-            System.arraycopy(list, index + 1, tempArr, index, tempArr.length - index);
+            System.arraycopy(list, index + 1, tempArr, index, list.length - index - 1);
             
             list = tempArr;
             
@@ -156,7 +148,56 @@ class SimpleList {
 		return index;
 	}
 	
-	public void length() {
-	    System.out.println("List length: " + list.length + "\n");
+	/**
+	 * append a value to the first empty space in the list.
+	 * @param value = the value to append
+	 */
+	public void append(int value) {
+		count++;
+        
+        if (count <= list.length) { // if the list is not fully filled
+            list[count - 1] = value; // set it to the first empty space available.
+        } else {
+        	// same logic as adding a new value
+            int newLength = (int) (list.length + list.length / 2);
+            int[] tempArr = new int[newLength];
+            
+            for (int i = 1; i < list.length; i++) {
+                tempArr[i] = list[i - 1];
+            }
+            
+            tempArr[count - 1] = value; // set it to the first empty space
+            list = tempArr;
+        }
+	}
+	
+	/**
+	 * return the first value in the list, or -1 if the list is empty
+	 * @return
+	 */
+	public int first() {
+		if (count > 0) {
+			return list[0];
+		}
+		return -1;
+	}
+	
+	/**
+	 * return the last value in the list, or -1 if the list is empty
+	 * @return
+	 */
+	public int last() {
+		if (count > 0) {
+			return list[count - 1];
+		}
+		return -1;
+	}
+	
+	/**
+	 * return the overall size of the list, including empty spaces
+	 * @return
+	 */
+	public int size() {
+		return list.length;
 	}
 }

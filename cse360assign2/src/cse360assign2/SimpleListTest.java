@@ -46,32 +46,36 @@ public class SimpleListTest {
 		String actual_output = list.toString();
 		
 		assertEquals(expected_output, actual_output);
-		//fail("Not yet implemented");
 	}
 	
-	/**
-	 * Tests whether the values are NOT being added in the correct 
-	 * order.
-	 */
 	@Test
-	public void testAddFail() {
+	public void testRemoveNormal() {
 		SimpleList list = new SimpleList();
-		list.add(1);
-		list.add(2);
+		list.add(5);
 		list.add(3);
+		list.add(2);
+		list.add(5);
+		list.add(7);
+		list.add(12);
+		list.add(15);
+		list.add(16);
+		list.add(2);
+		list.add(4);
 		
-		String expected_output = "1 2 3 0 0 0 0 0 0 0";
-		String actual_output = list.toString();
+		list.remove(4);
 		
-		assertNotEquals(expected_output, actual_output);
-		//fail("Not yet implemented");
+		String list_string = list.toString();
+		String expected = "2 16 15 12 7 5 2 3 5 0";
+		assertEquals(expected, list_string);
 	}
 	
 	/**
-	 * Tests whether the value specified is being removed from the list.
+	 * Tests whether the value specified is being removed from the list
+	 * as well as cuts down the length of the list by 25% of the current
+	 * length.
 	 */
 	@Test
-	public void testRemove() {
+	public void testRemoveCutLength() {
 		SimpleList list = new SimpleList();
 		list.add(5);
 		list.add(3);
@@ -81,7 +85,7 @@ public class SimpleListTest {
 		list.remove(5);
 		
 		String list_string = list.toString();
-		String expected = "2 3 5 0 0 0 0 0 0 0";
+		String expected = "2 3 5 0 0 0 0 0";
 		assertEquals(expected, list_string);
 	}
 	
@@ -218,5 +222,93 @@ public class SimpleListTest {
 		int not_found_index = list.search(125);
 		expected_index = -1;
 		assertEquals(expected_index, not_found_index);
+	}
+	
+	@Test
+	public void countOverflow() {
+		SimpleList list = new SimpleList();
+		list.add(5);
+		list.add(6);
+		list.add(7);
+		list.add(5);
+		list.add(3);
+		list.add(1);
+		list.add(7);
+		list.add(8);
+		list.add(2);
+		list.add(4);
+		list.add(10);
+		String listString = "The values in the list are: " + list.toString();
+		String expectedString = "The values in the list are: "
+				+ "10 4 2 8 7 1 3 5 7 6 5 0 0 0 0";
+		
+		assertEquals(listString, expectedString);
+	}
+	
+	@Test
+	public void returnSizeTest() {
+		SimpleList list = new SimpleList();
+		list.add(5);
+		list.add(6);
+		list.add(7);
+		list.add(5);
+		list.add(3);
+		list.add(1);
+		
+		String listString = "The size of the list is: " + list.size();
+		String expectedString = "The size of the list is: 10";
+		
+		assertEquals(listString, expectedString);
+	}
+	
+	@Test
+	public void returnFirstTest() {
+		SimpleList list = new SimpleList();
+		list.add(5);
+		list.add(6);
+		list.add(7);
+		list.add(5);
+		list.add(3);
+		list.add(1);
+		
+		String listString = "The first value in the list is: " + list.first();
+		String expectedString = "The first value in the list is: 1";
+		
+		assertEquals(listString, expectedString);
+	}
+	
+	@Test
+	public void returnLastTest() {
+		SimpleList list = new SimpleList();
+		list.add(5);
+		list.add(6);
+		list.add(7);
+		list.add(5);
+		list.add(3);
+		list.add(1);
+		
+		String listString = "The last value in the list is: " + list.last();
+		String expectedString = "The last value in the list is: 5";
+	
+		assertEquals(listString, expectedString);
+	}
+	
+	@Test
+	public void testAppend() {
+		SimpleList list = new SimpleList();
+		list.add(5);
+		list.add(6);
+		list.add(7);
+		list.add(5);
+		list.add(3);
+		list.add(1);
+		
+		list.append(12);
+		
+		String list_string = "The values in the list are: " + list.toString();
+		// expected string has a trailing whitespace
+		String expected = "The values in the list are: 1 3 5 7 6 5 12 0 0 0";
+		
+		assertEquals(expected, list_string);
 	}
 }
